@@ -5,7 +5,7 @@
     Authors: Matt Niemiec and Abigail Fernandes
     The solution contains the same number of lines (plus imports)
 """
-
+# Not sure if these imports are legal or not? I assume so
 import hashlib, binascii, os
 
 user = input("Enter a username: ")
