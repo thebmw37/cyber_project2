@@ -8,16 +8,26 @@
         is provided as a sanity check)
 
     Put your team members' names:
-
-
-
+    Bryce Woods
+    Prateek Makhija
+    Jason Nguyen
 """
 
 import socket
+import hashlib
+import hashlib, binascii, os
+from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 
 host = "localhost"
 port = 10001
 
+iv = "superbruhmoment!"
+
+rsa_file = open('../id_rsa','r')
+server_private_key = RSA.importKey(rsa_file.read())
+rsa_file.close()
 
 # A helper function. It may come in handy when performing symmetric encryption
 def pad_message(message):
@@ -26,20 +36,20 @@ def pad_message(message):
 
 # Write a function that decrypts a message using the server's private key
 def decrypt_key(session_key):
-    # TODO: Implement this function
-    pass
+    decryptor = PKCS1_OAEP.new(server_private_key)
+    return decryptor.decrypt(session_key)
 
 
 # Write a function that decrypts a message using the session key
-def decrypt_message(client_message, session_key):
-    # TODO: Implement this function
-    pass
+def decrypt_message(message, session_key):
+    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return cipher.decrypt(message).decode('utf-8')
 
 
 # Encrypt a message using the session key
 def encrypt_message(message, session_key):
-    # TODO: Implement this function
-    pass
+    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return cipher.encrypt(pad_message(message).encode('utf-8'))
 
 
 # Receive 1024 bytes from the client
@@ -66,8 +76,8 @@ def verify_hash(user, password):
         for line in reader.read().split('\n'):
             line = line.split("\t")
             if line[0] == user:
-                # TODO: Generate the hashed password
-                # hashed_password =
+                # Generate the hashed password
+                hashed_password = hashlib.sha512((password + line[1]).encode()).hexdigest()
                 return hashed_password == line[2]
         reader.close()
     except FileNotFoundError:
@@ -104,11 +114,19 @@ def main():
                 # Receive encrypted message from client
                 ciphertext_message = receive_message(connection)
 
-                # TODO: Decrypt message from client
+                # Decrypt message from client
+                received_message = decrypt_message(ciphertext_message, plaintext_key)
 
-                # TODO: Split response from user into the username and password
+                # Split response from user into the username and password
+                user, password = received_message.split()
+                print(user)
+                if verify_hash(user, password):
+                    response = "User Authenticated"
+                else:
+                    response = "Username/Password Incorrect"
 
-                # TODO: Encrypt response to client
+                # Encrypt response to client
+                ciphertext_response = encrypt_message(response, plaintext_key)
 
                 # Send encrypted response
                 send_message(connection, ciphertext_response)
