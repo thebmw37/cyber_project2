@@ -126,10 +126,10 @@ def main():
                     response = "Username/Password Incorrect"
 
                 # Encrypt response to client
-                ciphertext_response = encrypt_message(response, plaintext_key)
+                encrypted_response = encrypt_message(response, plaintext_key)
 
                 # Send encrypted response
-                send_message(connection, ciphertext_response)
+                send_message(connection, encrypted_response)
             finally:
                 # Clean up the connection
                 connection.close()
