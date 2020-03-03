@@ -49,14 +49,14 @@ def encrypt_handshake(session_key):
 
 # Encrypts the message using AES. Same as server function
 def encrypt_message(message, session_key):
-    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
-    return cipher.encrypt(pad_message(message).encode('utf-8'))
+    new_cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return new_cipher.encrypt(pad_message(message).encode('utf-8'))
 
 
 # Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
-    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
-    return cipher.decrypt(message).decode('utf-8')
+    new_cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return new_cipher.decrypt(message).decode('utf-8')
 
 
 # Sends a message over TCP

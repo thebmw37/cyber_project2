@@ -42,14 +42,14 @@ def decrypt_key(session_key):
 
 # Write a function that decrypts a message using the session key
 def decrypt_message(message, session_key):
-    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
-    return cipher.decrypt(message).decode('utf-8')
+    new_cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return new_cipher.decrypt(message).decode('utf-8')
 
 
 # Encrypt a message using the session key
 def encrypt_message(message, session_key):
-    cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
-    return cipher.encrypt(pad_message(message).encode('utf-8'))
+    new_cipher = AES.new(session_key, AES.MODE_CFB, iv.encode('utf-8'))
+    return new_cipher.encrypt(pad_message(message).encode('utf-8'))
 
 
 # Receive 1024 bytes from the client
