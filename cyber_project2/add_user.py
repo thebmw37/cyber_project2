@@ -12,7 +12,7 @@ user = input("Enter a username: ")
 password = input("Enter a password: ")
 
 # Create a salt and hash the password
-salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+salt = hashlib.sha256(os.urandom(64)).hexdigest().encode('ascii')
 hashed_password = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
 
 try:
